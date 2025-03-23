@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Enhanced URL Shortening Service - User Stories</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
+    <style>
+        .card-header { background-color: #f8f9fa; }
+        .card-body { background-color: #f1f3f5; }
+        .story-header { font-weight: bold; color: #007bff; }
+        .story-description { margin-bottom: 10px; }
+        .acceptance-criteria { list-style-type: none; padding-left: 0; }
+        h2 { margin-top: 40px; }
+    </style>
+</head>
+<body>
+<div class="container my-5">
+    <h1 class="text-center mb-4">Epic: Enhanced URL Shortening Service</h1>
+
+    <!-- Section 1: User Account & Management -->
+    <h2>User Account & Management</h2>
+    <div id="accordionUser">
+        <!-- Authentication & Authorization -->
+        <div class="card">
+            <div class="card-header" id="headingAuth">
+                <h5 class="mb-0">
+                    <button class="btn btn-link" data-toggle="collapse" data-target="#collapseAuth" aria-expanded="true" aria-controls="collapseAuth">
+                        1. User Authentication & Authorization
+                    </button>
+                </h5>
+            </div>
+            <div id="collapseAuth" class="collapse show" aria-labelledby="headingAuth" data-parent="#accordionUser">
+                <div class="card-body">
+                    <p class="story-description">
+                        Users must securely register, log in, and manage their own shortened URLs.
+                    </p>
+                    <div class="story-header">Acceptance Criteria:</div>
+                    <ul class="acceptance-criteria">
+                        <li>Users can register, log in, and log out.</li>
+                        <li>Authentication uses JWT tokens or OAuth2.</li>
+                        <li>Users access only their own URL data.</li>
+                    </ul>
+                    <div class="story-header">Technologies:</div>
+                    <ul>
+                        <li>Spring Security</li>
+                        <li>JWT/OAuth2</li>
+                        <li>MySQL</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- User Profile Management -->
+        <div class="card">
+            <div class="card-header" id="headingProfile">
+                <h5 class="mb-0">
+                    <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseProfile" aria-expanded="false" aria-controls="collapseProfile">
+                        2. User Profile Management & Localization
+                    </button>
+                </h5>
+            </div>
+            <div id="collapseProfile" class="collapse" aria-labelledby="headingProfile" data-parent="#accordionUser">
+                <div class="card-body">
+                    <p class="story-description">
+                        Users can view and update their profile information and select their preferred language.
+                    </p>
+                    <div class="story-header">Acceptance Criteria:</div>
+                    <ul class="acceptance-criteria">
+                        <li>Users view/update email, password, and profile picture.</li>
+                        <li>Option to delete the account.</li>
+                        <li>Interface supports multi-language (i18n).</li>
+                    </ul>
+                    <div class="story-header">Technologies:</div>
+                    <ul>
+                        <li>Spring Boot APIs with Spring Security</li>
+                        <li>Thymeleaf for rendering views</li>
+                        <li>Message properties for localization</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Admin Panel -->
+        <div class="card">
+            <div class="card-header" id="headingAdmin">
+                <h5 class="mb-0">
+                    <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseAdmin" aria-expanded="false" aria-controls="collapseAdmin">
+                        3. Admin Panel
+                    </button>
+                </h5>
+            </div>
+            <div id="collapseAdmin" class="collapse" aria-labelledby="headingAdmin" data-parent="#accordionUser">
+                <div class="card-body">
+                    <p class="story-description">
+                        Administrators need a dedicated dashboard to manage user URLs and review global statistics.
+                    </p>
+                    <div class="story-header">Acceptance Criteria:</div>
+                    <ul class="acceptance-criteria">
+                        <li>Admins view all user URLs and analytics.</li>
+                        <li>Ability to disable or delete flagged URLs.</li>
+                        <li>Display global statistics (total clicks, active links, etc.).</li>
+                    </ul>
+                    <div class="story-header">Technologies:</div>
+                    <ul>
+                        <li>Spring Boot</li>
+                        <li>Thymeleaf or Angular for the interface</li>
+                        <li>Spring Security</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Section 2: URL Creation & Customization -->
+    <h2>URL Creation & Customization</h2>
+    <div id="accordionURL">
+        <!-- Custom Short URLs -->
+        <div class="card">
+            <div class="card-header" id="headingCustom">
+                <h5 class="mb-0">
+                    <button class="btn btn-link" data-toggle="collapse" data-target="#collapseCustom" aria-expanded="true" aria-controls="collapseCustom">
+                        4. Custom Short URLs
+                    </button>
+                </h5>
+            </div>
+            <div id="collapseCustom" class="collapse show" aria-labelledby="headingCustom" data-parent="#accordionURL">
+                <div class="card-body">
+                    <p class="story-description">
+                        Allow users to create personalized short URLs using custom aliases.
+                    </p>
+                    <div class="story-header">Acceptance Criteria:</div>
+                    <ul class="acceptance-criteria">
+                        <li>Users specify a custom alias when shortening a URL.</li>
+                        <li>Error or alternative suggestions if alias is already taken.</li>
+                    </ul>
+                    <div class="story-header">Technologies:</div>
+                    <ul>
+                        <li>Spring Boot REST APIs</li>
+                        <li>MySQL for URL storage</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Short URL Expiration -->
+        <div class="card">
+            <div class="card-header" id="headingExpiration">
+                <h5 class="mb-0">
+                    <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseExpiration" aria-expanded="false" aria-controls="collapseExpiration">
+                        5. Short URL Expiration & Batch Processing
+                    </button>
+                </h5>
+            </div>
+            <div id="collapseExpiration" class="collapse" aria-labelledby="headingExpiration" data-parent="#accordionURL">
+                <div class="card-body">
+                    <p class="story-description">
+                        Allow users to set expiration dates for their URLs and enable batch processing for multiple URL shortening.
+                    </p>
+                    <div class="story-header">Acceptance Criteria:</div>
+                    <ul class="acceptance-criteria">
+                        <li>Users set an expiration date/time when creating a URL.</li>
+                        <li>Expired URLs become inactive automatically.</li>
+                        <li>Batch upload of CSV/TXT files or pasted URLs to shorten multiple URLs at once.</li>
+                    </ul>
+                    <div class="story-header">Technologies:</div>
+                    <ul>
+                        <li>Spring Boot for API logic and scheduling (@Scheduled)</li>
+                        <li>Spring Batch (optional) for batch processing</li>
+                        <li>MySQL for storing URL data and expiration fields</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Custom URL Shortening API -->
+        <div class="card">
+            <div class="card-header" id="headingAPI">
+                <h5 class="mb-0">
+                    <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseAPI" aria-expanded="false" aria-controls="collapseAPI">
+                        6. Public URL Shortening API
+                    </button>
+                </h5>
+            </div>
+            <div id="collapseAPI" class="collapse" aria-labelledby="headingAPI" data-parent="#accordionURL">
+                <div class="card-body">
+                    <p class="story-description">
+                        Expose a public API for third-party applications to shorten URLs programmatically.
+                    </p>
+                    <div class="story-header">Acceptance Criteria:</div>
+                    <ul class="acceptance-criteria">
+                        <li>API endpoint for shortening URLs with optional custom alias and expiration.</li>
+                        <li>API requests require authentication via API key.</li>
+                    </ul>
+                    <div class="story-header">Technologies:</div>
+                    <ul>
+                        <li>Spring Boot REST APIs</li>
+                        <li>Spring Security for API authentication</li>
+                        <li>MySQL for data storage</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Section 3: URL Access & Analytics -->
+    <h2>URL Access & Analytics</h2>
+    <div id="accordionAnalytics">
+        <!-- Enhanced Analytics & Tracking -->
+        <div class="card">
+            <div class="card-header" id="headingAnalytics">
+                <h5 class="mb-0">
+                    <button class="btn btn-link" data-toggle="collapse" data-target="#collapseAnalytics" aria-expanded="true" aria-controls="collapseAnalytics">
+                        7. Enhanced Analytics & Tracking
+                    </button>
+                </h5>
+            </div>
+            <div id="collapseAnalytics" class="collapse show" aria-labelledby="headingAnalytics" data-parent="#accordionAnalytics">
+                <div class="card-body">
+                    <p class="story-description">
+                        Collect and display detailed analytics for each URL, including clicks, geographic data, and device types.
+                    </p>
+                    <div class="story-header">Acceptance Criteria:</div>
+                    <ul class="acceptance-criteria">
+                        <li>Track clicks, user geolocation, device, and referral data.</li>
+                        <li>Display analytics via graphs or reports in the dashboard.</li>
+                    </ul>
+                    <div class="story-header">Technologies:</div>
+                    <ul>
+                        <li>Spring Boot for analytics collection</li>
+                        <li>GeoIP library for location tracking</li>
+                        <li>MySQL for analytics data</li>
+                        <li>Chart.js for visualization</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- URL Preview & Feedback -->
+        <div class="card">
+            <div class="card-header" id="headingPreviewFeedback">
+                <h5 class="mb-0">
+                    <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapsePreviewFeedback" aria-expanded="false" aria-controls="collapsePreviewFeedback">
+                        8. URL Preview & Feedback System
+                    </button>
+                </h5>
+            </div>
+            <div id="collapsePreviewFeedback" class="collapse" aria-labelledby="headingPreviewFeedback" data-parent="#accordionAnalytics">
+                <div class="card-body">
+                    <p class="story-description">
+                        Enable URL preview before redirection and allow users to rate and comment on the shortened URLs.
+                    </p>
+                    <div class="story-header">Acceptance Criteria:</div>
+                    <ul class="acceptance-criteria">
+                        <li>Preview destination URL and show a warning if unsafe.</li>
+                        <li>Users can rate URLs (1-5 stars) and leave comments.</li>
+                    </ul>
+                    <div class="story-header">Technologies:</div>
+                    <ul>
+                        <li>JavaScript for URL preview</li>
+                        <li>Spring Boot for backend handling</li>
+                        <li>MySQL for storing feedback</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- URL Expiration Notification -->
+        <div class="card">
+            <div class="card-header" id="headingNotification">
+                <h5 class="mb-0">
+                    <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseNotification" aria-expanded="false" aria-controls="collapseNotification">
+                        9. URL Expiration Notification
+                    </button>
+                </h5>
+            </div>
+            <div id="collapseNotification" class="collapse" aria-labelledby="headingNotification" data-parent="#accordionAnalytics">
+                <div class="card-body">
+                    <p class="story-description">
+                        Notify users by email when their shortened URLs are nearing expiration.
+                    </p>
+                    <div class="story-header">Acceptance Criteria:</div>
+                    <ul class="acceptance-criteria">
+                        <li>Email alerts sent a few days before expiration.</li>
+                        <li>Users can view expiration dates on their dashboard.</li>
+                        <li>Expired URLs are automatically deactivated.</li>
+                    </ul>
+                    <div class="story-header">Technologies:</div>
+                    <ul>
+                        <li>Spring Boot for scheduling and notifications</li>
+                        <li>JavaMailSender for email functionality</li>
+                        <li>MySQL for storing expiration data</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Section 4: Performance & Security Enhancements -->
+    <h2>Performance & Security Enhancements</h2>
+    <div id="accordionSecurity">
+        <!-- Rate Limiting -->
+        <div class="card">
+            <div class="card-header" id="headingRateLimiting">
+                <h5 class="mb-0">
+                    <button class="btn btn-link" data-toggle="collapse" data-target="#collapseRateLimiting" aria-expanded="true" aria-controls="collapseRateLimiting">
+                        10. Rate Limiting
+                    </button>
+                </h5>
+            </div>
+            <div id="collapseRateLimiting" class="collapse show" aria-labelledby="headingRateLimiting" data-parent="#accordionSecurity">
+                <div class="card-body">
+                    <p class="story-description">
+                        Implement rate limiting to prevent abuse and ensure system performance.
+                    </p>
+                    <div class="story-header">Acceptance Criteria:</div>
+                    <ul class="acceptance-criteria">
+                        <li>Limit requests per user/IP per minute/hour.</li>
+                        <li>Users receive clear error messages when limits are exceeded.</li>
+                    </ul>
+                    <div class="story-header">Technologies:</div>
+                    <ul>
+                        <li>Spring Boot with Bucket4j or Spring RateLimiter</li>
+                        <li>Redis (optional) for storing rate limit data</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap JS and dependencies -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.5/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
