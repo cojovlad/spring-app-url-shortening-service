@@ -1,0 +1,1 @@
+check if the cookie generation for persistance is good

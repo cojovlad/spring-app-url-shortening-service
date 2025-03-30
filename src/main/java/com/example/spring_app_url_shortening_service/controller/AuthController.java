@@ -47,7 +47,7 @@ public class AuthController {
             Model model) {
 
         if (authentication != null && authentication.isAuthenticated()) {
-            return "redirect:/dashboard";
+            return "redirect:/api/v1/dashboard";
         }
 
         if (error != null) {
