@@ -25,7 +25,7 @@ public class UserServiceImpl implements UserService {
     /**
      * Constructs a new UserServiceImpl with required dependencies.
      *
-     * @param userRepository the user repository for database operations
+     * @param userRepository  the user repository for database operations
      * @param passwordEncoder the password encoder for securing user credentials
      */
     @Autowired
@@ -37,14 +37,15 @@ public class UserServiceImpl implements UserService {
 
     /**
      * {@inheritDoc}
+     *
      * @throws UserAlreadyExistsException if either email or username already exists in the system
      */
     @Override
     public User createUser(User user) {
-        if(userRepository.existsByEmail(user.getEmail())){
+        if (userRepository.existsByEmail(user.getEmail())) {
             throw new UserAlreadyExistsException("user.exists");
         }
-        if(userRepository.existsByUsername(user.getUsername())) {
+        if (userRepository.existsByUsername(user.getUsername())) {
             throw new UserAlreadyExistsException("username.exists");
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -53,6 +54,7 @@ public class UserServiceImpl implements UserService {
 
     /**
      * {@inheritDoc}
+     *
      * @return list of all users in the system, ordered by creation date
      */
     @Override
@@ -62,6 +64,7 @@ public class UserServiceImpl implements UserService {
 
     /**
      * {@inheritDoc}
+     *
      * @param id the ID of the user to retrieve
      * @return Optional containing the user if found, empty otherwise
      */
@@ -72,6 +75,7 @@ public class UserServiceImpl implements UserService {
 
     /**
      * {@inheritDoc}
+     *
      * @param email the email address to search for
      * @return Optional containing the user if found, empty otherwise
      */
@@ -82,6 +86,7 @@ public class UserServiceImpl implements UserService {
 
     /**
      * {@inheritDoc}
+     *
      * @param username the username to search for
      * @return Optional containing the user if found, empty otherwise
      */
@@ -92,6 +97,7 @@ public class UserServiceImpl implements UserService {
 
     /**
      * {@inheritDoc}
+     *
      * @param id the ID of the user to delete
      * @throws EntityNotFoundException if no user exists with the given ID
      */

@@ -20,6 +20,7 @@ public class AuthController {
 
     /**
      * Constructs an AuthController with the specified UserService.
+     *
      * @param userServiceInjection the user service to be used for user operations
      */
     @Autowired
@@ -29,12 +30,13 @@ public class AuthController {
 
     /**
      * Displays the login form with optional status messages.
-     * @param rememberMe optional remember-me parameter
-     * @param error optional error parameter indicating failed login
-     * @param logout optional logout parameter indicating successful logout
-     * @param registered optional parameter indicating successful registration
+     *
+     * @param rememberMe     optional remember-me parameter
+     * @param error          optional error parameter indicating failed login
+     * @param logout         optional logout parameter indicating successful logout
+     * @param registered     optional parameter indicating successful registration
      * @param authentication current authentication object
-     * @param model the model to add attributes for the view
+     * @param model          the model to add attributes for the view
      * @return the login view name or redirects to dashboard if already authenticated
      */
     @GetMapping("/login")
@@ -64,6 +66,7 @@ public class AuthController {
 
     /**
      * Displays the user registration form.
+     *
      * @param model the model to add attributes for the view
      * @return the registration view name
      */
@@ -75,7 +78,8 @@ public class AuthController {
 
     /**
      * Processes user registration form submission.
-     * @param user the user entity populated from the form
+     *
+     * @param user  the user entity populated from the form
      * @param model the model to add attributes for the view
      * @return redirect to login page on success or registration page with error
      */
@@ -92,6 +96,7 @@ public class AuthController {
 
     /**
      * REST API endpoint for user registration.
+     *
      * @param user the user data in JSON format
      * @return ResponseEntity with created user or error message
      */

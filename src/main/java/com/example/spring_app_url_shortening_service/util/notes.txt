@@ -1,4 +1,0 @@
-check if the cookie generation for persistance is good
-implement page for expired sessions that redirects you to the login page when you click
-add ratefilter
-tests for everythinge done so far

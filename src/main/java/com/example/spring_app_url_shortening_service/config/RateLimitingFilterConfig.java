@@ -36,11 +36,11 @@ public class RateLimitingFilterConfig extends OncePerRequestFilter {
      * Filters the incoming HTTP request and applies rate limiting based on the IP address and request path.
      * If the rate limit is exceeded, the request is blocked with a 403 Forbidden response.
      *
-     * @param request The incoming HTTP request.
-     * @param response The HTTP response that will be sent back to the client.
+     * @param request     The incoming HTTP request.
+     * @param response    The HTTP response that will be sent back to the client.
      * @param filterChain The filter chain to continue the request processing if rate limiting is not exceeded.
      * @throws ServletException If an error occurs during filtering.
-     * @throws IOException If an error occurs while processing the request or response.
+     * @throws IOException      If an error occurs while processing the request or response.
      */
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {

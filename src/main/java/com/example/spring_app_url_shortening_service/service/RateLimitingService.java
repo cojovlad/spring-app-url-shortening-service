@@ -40,7 +40,7 @@ public class RateLimitingService {
      * Resolves a rate limit bucket for a given IP address and endpoint.
      * It creates a new bucket if one does not exist in the cache, applying the appropriate rate limit based on the endpoint.
      *
-     * @param ip The IP address of the client making the request.
+     * @param ip       The IP address of the client making the request.
      * @param endpoint The endpoint being accessed.
      * @return A Bucket object representing the rate limit for the specified IP and endpoint.
      */

@@ -1,6 +1,7 @@
 package com.example.spring_app_url_shortening_service.service;
 
 import com.example.spring_app_url_shortening_service.entity.User;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -14,9 +15,8 @@ public interface UserService {
      *
      * @param user the user entity to create (must not be null)
      * @return the persisted user entity with generated ID
-     * @throws com.example.spring_app_url_shortening_service.exception.UserAlreadyExistsException
-     *         if a user with the same email or username already exists
-     * @throws IllegalArgumentException if the provided user entity is null
+     * @throws com.example.spring_app_url_shortening_service.exception.UserAlreadyExistsException if a user with the same email or username already exists
+     * @throws IllegalArgumentException                                                           if the provided user entity is null
      */
     User createUser(User user);
 
@@ -59,7 +59,7 @@ public interface UserService {
      *
      * @param id the ID of the user to delete (must not be null)
      * @throws jakarta.persistence.EntityNotFoundException if no user exists with the given ID
-     * @throws IllegalArgumentException if the provided ID is null
+     * @throws IllegalArgumentException                    if the provided ID is null
      */
     void deleteUser(Long id);
 }
