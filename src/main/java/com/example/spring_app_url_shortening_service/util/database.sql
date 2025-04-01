@@ -26,6 +26,14 @@ CREATE TABLE languages (
                            language_code VARCHAR(10) NOT NULL UNIQUE
 );
 
+-- Persistent Login Table
+CREATE TABLE persistent_logins (
+                                   username VARCHAR(64) NOT NULL,
+                                   series VARCHAR(64) PRIMARY KEY,
+                                   token VARCHAR(64) NOT NULL,
+                                   last_used TIMESTAMP NOT NULL
+);
+
 -- Insert Roles
 INSERT INTO roles (name) VALUES ('USER'), ('ADMIN');
 
