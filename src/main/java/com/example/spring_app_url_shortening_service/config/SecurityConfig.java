@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 import org.springframework.security.web.header.writers.XXssProtectionHeaderWriter;
@@ -25,11 +26,13 @@ public class SecurityConfig {
 
     private final UserDetailsService userDetailsService;
     private final DataSource dataSource;
+    private final RateLimitingFilterConfig rateLimitingFilterConfig;
 
     @Autowired
-    public SecurityConfig(UserDetailsService userDetailsServiceInjection, DataSource dataSourceInjection) {
+    public SecurityConfig(UserDetailsService userDetailsServiceInjection, DataSource dataSourceInjection, RateLimitingFilterConfig rateLimitingFilterConfigInjection) {
         this.userDetailsService = userDetailsServiceInjection;
         this.dataSource = dataSourceInjection;
+        this.rateLimitingFilterConfig = rateLimitingFilterConfigInjection;
     }
 
     @Bean
@@ -56,6 +59,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+                .addFilterBefore(rateLimitingFilterConfig, UsernamePasswordAuthenticationFilter.class)
                 .sessionManagement(session -> session
                         .sessionFixation().migrateSession()
                         .maximumSessions(1)
@@ -83,7 +87,7 @@ public class SecurityConfig {
                         .key(generateSecureKey())
                         .tokenValiditySeconds(86400)
                         .rememberMeCookieName("remember-me-cookie")
-                        .useSecureCookie(true) //TODO Set to true in production with HTTPS
+                        .useSecureCookie(true)
                         .alwaysRemember(true)
                 )
                 .authorizeHttpRequests(auth -> auth
