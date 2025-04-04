@@ -5,6 +5,7 @@ import com.example.spring_app_url_shortening_service.exception.UserAlreadyExists
 import com.example.spring_app_url_shortening_service.repository.UserRepository;
 import com.example.spring_app_url_shortening_service.service.UserService;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -107,5 +108,45 @@ public class UserServiceImpl implements UserService {
             throw new EntityNotFoundException("user.not.exists");
         }
         userRepository.deleteById(id);
+    }
+
+    @Transactional
+    public void updateUserProfile(User updatedUser) {
+        User existingUser = userRepository.findById(updatedUser.getId())
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+
+        Optional<User> userByEmail = userRepository.findByEmail(updatedUser.getEmail());
+        if (userByEmail.isPresent() && !userByEmail.get().getId().equals(existingUser.getId())) {
+            throw new UserAlreadyExistsException("Email is already taken.");
+        }
+
+        Optional<User> userByUsername = userRepository.findByUsername(updatedUser.getUsername());
+        if (userByUsername.isPresent() && !userByUsername.get().getId().equals(existingUser.getId())) {
+            throw new UserAlreadyExistsException("Username is already taken.");
+        }
+
+        existingUser.setEmail(updatedUser.getEmail());
+        existingUser.setUsername(updatedUser.getUsername());
+        existingUser.setFirstName(updatedUser.getFirstName());
+        existingUser.setLastName(updatedUser.getLastName());
+
+        userRepository.save(existingUser);
+    }
+
+    @Transactional
+    public void changeUserPassword(String username, String currentPassword, String newPassword, String confirmNewPassword) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+
+        if (!passwordEncoder.matches(currentPassword, user.getPassword())) {
+            throw new IllegalArgumentException("Current password is incorrect.");
+        }
+
+        if (!newPassword.equals(confirmNewPassword)) {
+            throw new IllegalArgumentException("New passwords do not match.");
+        }
+
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
     }
 }
