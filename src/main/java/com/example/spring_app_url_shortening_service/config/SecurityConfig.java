@@ -91,13 +91,15 @@ public class SecurityConfig {
                         .alwaysRemember(true)
                 )
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/api/v1/profile/**")
+                        .authenticated())
+                .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
                                 "/",
                                 "/error",
                                 "/api/v1/auth/login",
                                 "/api/v1/auth/register",
                                 "/api/v1/auth/register/api",
-                                "/api/v1/profile",
                                 "/html/**",
                                 "/css/**",
                                 "/js/**",
