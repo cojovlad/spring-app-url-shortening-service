@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body>
+
+<div class="container mt-5">
+    <div class="card shadow-lg">
+        <div class="card-header bg-primary text-white text-center">
+            <h2>User Profile</h2>
+        </div>
+        <div class="card-body">
+            <p><strong>Username:</strong> <span th:text="${user.username}"></span></p>
+            <p><strong>Email:</strong> <span th:text="${user.email}"></span></p>
+            <p><strong>First Name:</strong> <span th:text="${user.firstName}"></span></p>
+            <p><strong>Last Name:</strong> <span th:text="${user.lastName}"></span></p>
+            <p><strong>Role:</strong> <span th:text="${user.role.roleName}"></span></p>
+            <p><strong>Account Status:</strong>
+                <span th:text="${user.isActive ? 'Active' : 'Disabled'}"
+                      th:classappend="${user.isActive} ? 'text-success' : 'text-danger'"></span>
+            </p>
+            <a href="/api/v1/dashboard" class="btn btn-secondary mt-3">Back to Dashboard</a>
+        </div>
+    </div>
+
+    <!-- Update Profile Form -->
+    <div class="card mt-4">
+        <div class="card-header bg-warning text-white">
+            <h4>Edit Profile</h4>
+        </div>
+        <div class="card-body">
+            <form th:action="@{/api/v1/profile/update}" method="post">
+                <input type="hidden" th:value="${user.id}" name="id"/>
+
+                <div class="mb-3">
+                    <label>Email:</label>
+                    <input type="email" class="form-control" name="email" th:value="${user.email}" required>
+                </div>
+
+                <div class="mb-3">
+                    <label>Username:</label>
+                    <input type="text" class="form-control" name="username" th:value="${user.username}" readonly>
+                </div>
+
+                <div class="mb-3">
+                    <label>First Name:</label>
+                    <input type="text" class="form-control" name="firstName" th:value="${user.firstName}" required>
+                </div>
+
+                <div class="mb-3">
+                    <label>Last Name:</label>
+                    <input type="text" class="form-control" name="lastName" th:value="${user.lastName}" required>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Update Profile</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Change Password Form -->
+    <div class="card mt-4">
+        <div class="card-header bg-danger text-white">
+            <h4>Change Password</h4>
+        </div>
+        <div class="card-body">
+            <form th:action="@{/api/v1/profile/change-password}" method="post">
+                <div class="mb-3">
+                    <label>Current Password:</label>
+                    <input type="password" class="form-control" name="currentPassword" required>
+                </div>
+
+                <div class="mb-3">
+                    <label>New Password:</label>
+                    <input type="password" class="form-control" name="newPassword" required>
+                </div>
+
+                <div class="mb-3">
+                    <label>Confirm New Password:</label>
+                    <input type="password" class="form-control" name="confirmNewPassword" required>
+                </div>
+
+                <button type="submit" class="btn btn-danger">Change Password</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
