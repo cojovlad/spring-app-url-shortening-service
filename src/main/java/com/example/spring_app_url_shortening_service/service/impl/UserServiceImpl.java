@@ -1,5 +1,6 @@
 package com.example.spring_app_url_shortening_service.service.impl;
 
+import com.example.spring_app_url_shortening_service.entity.Language;
 import com.example.spring_app_url_shortening_service.entity.User;
 import com.example.spring_app_url_shortening_service.exception.UserAlreadyExistsException;
 import com.example.spring_app_url_shortening_service.repository.UserRepository;
@@ -44,10 +45,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public User createUser(User user) {
         if (userRepository.existsByEmail(user.getEmail())) {
-            throw new UserAlreadyExistsException("user.exists");
+            throw new UserAlreadyExistsException("User email already exists");
         }
         if (userRepository.existsByUsername(user.getUsername())) {
-            throw new UserAlreadyExistsException("username.exists");
+            throw new UserAlreadyExistsException("Username already exists");
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
@@ -110,6 +111,21 @@ public class UserServiceImpl implements UserService {
         userRepository.deleteById(id);
     }
 
+    /**
+     * Updates the profile information of an existing user.
+     * <p>
+     * Performs the following validations:
+     * <ul>
+     *     <li>Ensures the user with the given ID exists.</li>
+     *     <li>Checks that the new email is not taken by another user.</li>
+     *     <li>Checks that the new username is not taken by another user.</li>
+     * </ul>
+     * Then updates the email, username, first name, and last name fields.
+     *
+     * @param updatedUser A {@link User} object containing the updated fields (must include valid ID).
+     * @throws EntityNotFoundException       if the user with the given ID does not exist.
+     * @throws UserAlreadyExistsException    if the provided email or username is already taken by another user.
+     */
     @Transactional
     public void updateUserProfile(User updatedUser) {
         User existingUser = userRepository.findById(updatedUser.getId())
@@ -133,6 +149,24 @@ public class UserServiceImpl implements UserService {
         userRepository.save(existingUser);
     }
 
+    /**
+     * Changes the password of a user identified by username.
+     * <p>
+     * Performs the following checks:
+     * <ul>
+     *     <li>Ensures the user exists.</li>
+     *     <li>Validates that the current password matches the stored password.</li>
+     *     <li>Checks that the new password and confirmation password match.</li>
+     * </ul>
+     * Then encodes and updates the user's password.
+     *
+     * @param username            the username of the user changing their password.
+     * @param currentPassword     the user's current password.
+     * @param newPassword         the new password to set.
+     * @param confirmNewPassword  the confirmation of the new password.
+     * @throws EntityNotFoundException   if the user does not exist.
+     * @throws IllegalArgumentException if the current password is incorrect or new passwords don't match.
+     */
     @Transactional
     public void changeUserPassword(String username, String currentPassword, String newPassword, String confirmNewPassword) {
         User user = userRepository.findByUsername(username)

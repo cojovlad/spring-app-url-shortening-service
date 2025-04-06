@@ -67,9 +67,31 @@ public interface UserService {
      */
     void deleteUser(Long id);
 
+    /**
+     * Updates the profile information of a user.
+     * <p>
+     * Validates that the email and username are not already used by other users.
+     * Then updates the user's profile fields (email, username, first name, last name).
+     *
+     * @param updatedUser a {@link User} object containing the updated user details (must include valid ID).
+     * @throws EmailAlreadyExistsException    if the provided email is already in use by another user.
+     * @throws UsernameAlreadyExistsException if the provided username is already in use by another user.
+     */
     void updateUserProfile(User updatedUser)
             throws EmailAlreadyExistsException, UsernameAlreadyExistsException;
 
+    /**
+     * Changes the password of the user identified by the given username.
+     * <p>
+     * Validates that the current password is correct and that the new password matches the confirmation.
+     *
+     * @param username           the username of the user.
+     * @param currentPassword    the user's current password.
+     * @param newPassword        the new password the user wants to set.
+     * @param confirmNewPassword the confirmation of the new password.
+     * @throws IncorrectPasswordException if the current password is incorrect.
+     * @throws PasswordMismatchException  if the new password and its confirmation do not match.
+     */
     void changeUserPassword(String username, String currentPassword, String newPassword, String confirmNewPassword)
             throws IncorrectPasswordException, PasswordMismatchException;
 }

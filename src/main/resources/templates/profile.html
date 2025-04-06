@@ -9,6 +9,24 @@
 <body>
 
 <div class="container mt-5">
+
+    <!-- Flash Messages -->
+    <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">
+        <span th:text="${success}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+    <div th:if="${updateError}" class="alert alert-danger alert-dismissible fade show" role="alert">
+        <span th:text="${updateError}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+    <div th:if="${passwordError}" class="alert alert-danger alert-dismissible fade show" role="alert">
+        <span th:text="${passwordError}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+    <!-- Profile Card -->
     <div class="card shadow-lg">
         <div class="card-header bg-primary text-white text-center">
             <h2>User Profile</h2>
@@ -55,7 +73,6 @@
                     <label>Last Name:</label>
                     <input type="text" class="form-control" name="lastName" th:value="${user.lastName}" required>
                 </div>
-
                 <button type="submit" class="btn btn-primary">Update Profile</button>
             </form>
         </div>
@@ -88,6 +105,9 @@
         </div>
     </div>
 </div>
+
+<!-- Bootstrap JS for dismissable alerts -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 </html>
