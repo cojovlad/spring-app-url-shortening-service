@@ -5,6 +5,7 @@ import com.example.spring_app_url_shortening_service.exception.EmailAlreadyExist
 import com.example.spring_app_url_shortening_service.exception.IncorrectPasswordException;
 import com.example.spring_app_url_shortening_service.exception.PasswordMismatchException;
 import com.example.spring_app_url_shortening_service.exception.UsernameAlreadyExistsException;
+import jakarta.persistence.EntityNotFoundException;
 
 import java.util.List;
 import java.util.Optional;
@@ -94,4 +95,13 @@ public interface UserService {
      */
     void changeUserPassword(String username, String currentPassword, String newPassword, String confirmNewPassword)
             throws IncorrectPasswordException, PasswordMismatchException;
+
+    /**
+     * Updates the language preference for a user identified by their username.
+     *
+     * @param username   the username of the user whose language is to be updated
+     * @param languageId the ID of the new language to assign to the user
+     * @throws EntityNotFoundException if the user or language does not exist
+     */
+    void updateUserLanguage(String username, int languageId)throws EntityNotFoundException;
 }

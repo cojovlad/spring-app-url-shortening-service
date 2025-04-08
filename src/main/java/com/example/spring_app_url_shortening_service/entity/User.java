@@ -88,6 +88,12 @@ public class User implements UserDetails {
             defaultRole.setId(1L);
             this.role = defaultRole;
         }
+
+        if(this.language==null){
+            Language defaultLanguage = new Language();
+            defaultLanguage.setId(1L);
+            this.language = defaultLanguage;
+        }
     }
 
     /**
