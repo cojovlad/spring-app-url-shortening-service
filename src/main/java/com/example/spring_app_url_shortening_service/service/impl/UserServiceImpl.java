@@ -3,6 +3,7 @@ package com.example.spring_app_url_shortening_service.service.impl;
 import com.example.spring_app_url_shortening_service.entity.Language;
 import com.example.spring_app_url_shortening_service.entity.User;
 import com.example.spring_app_url_shortening_service.exception.UserAlreadyExistsException;
+import com.example.spring_app_url_shortening_service.repository.LanguageRepository;
 import com.example.spring_app_url_shortening_service.repository.UserRepository;
 import com.example.spring_app_url_shortening_service.service.UserService;
 import jakarta.persistence.EntityNotFoundException;
@@ -22,20 +23,22 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final LanguageRepository languageRepository;
     private final PasswordEncoder passwordEncoder;
 
     /**
      * Constructs a new UserServiceImpl with required dependencies.
      *
-     * @param userRepository  the user repository for database operations
-     * @param passwordEncoder the password encoder for securing user credentials
+     * @param userRepository     the user repository for database operations
+     * @param passwordEncoder    the password encoder for securing user credentials
+     * @param languageRepository the language repository for database operations
      */
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public UserServiceImpl(UserRepository userRepository, LanguageRepository languageRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.languageRepository = languageRepository;
     }
-
 
     /**
      * {@inheritDoc}
@@ -106,7 +109,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteUser(Long id) {
         if (!userRepository.existsById(id)) {
-            throw new EntityNotFoundException("user.not.exists");
+            throw new EntityNotFoundException("User does not exist");
         }
         userRepository.deleteById(id);
     }
@@ -123,8 +126,8 @@ public class UserServiceImpl implements UserService {
      * Then updates the email, username, first name, and last name fields.
      *
      * @param updatedUser A {@link User} object containing the updated fields (must include valid ID).
-     * @throws EntityNotFoundException       if the user with the given ID does not exist.
-     * @throws UserAlreadyExistsException    if the provided email or username is already taken by another user.
+     * @throws EntityNotFoundException    if the user with the given ID does not exist.
+     * @throws UserAlreadyExistsException if the provided email or username is already taken by another user.
      */
     @Transactional
     public void updateUserProfile(User updatedUser) {
@@ -160,11 +163,11 @@ public class UserServiceImpl implements UserService {
      * </ul>
      * Then encodes and updates the user's password.
      *
-     * @param username            the username of the user changing their password.
-     * @param currentPassword     the user's current password.
-     * @param newPassword         the new password to set.
-     * @param confirmNewPassword  the confirmation of the new password.
-     * @throws EntityNotFoundException   if the user does not exist.
+     * @param username           the username of the user changing their password.
+     * @param currentPassword    the user's current password.
+     * @param newPassword        the new password to set.
+     * @param confirmNewPassword the confirmation of the new password.
+     * @throws EntityNotFoundException  if the user does not exist.
      * @throws IllegalArgumentException if the current password is incorrect or new passwords don't match.
      */
     @Transactional
@@ -181,6 +184,23 @@ public class UserServiceImpl implements UserService {
         }
 
         user.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
+    }
+
+    /**
+     * Updates the language preference of the user identified by the given username.
+     *
+     * @param username   the username of the user whose language should be updated
+     * @param languageId the ID of the new language to be set for the user
+     * @throws EntityNotFoundException if the user or language is not found in the database
+     */
+    @Override
+    public void updateUserLanguage(String username, int languageId) throws EntityNotFoundException {
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new EntityNotFoundException("User not found"));
+
+        Language language = languageRepository.findById((long) languageId).orElseThrow(() -> new EntityNotFoundException("Language not found"));
+
+        user.setLanguage(language);
         userRepository.save(user);
     }
 }
