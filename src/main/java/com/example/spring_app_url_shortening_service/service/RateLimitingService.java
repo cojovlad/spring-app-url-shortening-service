@@ -36,6 +36,8 @@ public class RateLimitingService {
      */
     private final Bandwidth apiLimit = Bandwidth.classic(100, Refill.intervally(100, Duration.ofMinutes(1)));
 
+    private final Bandwidth aliasRedirectLimit = Bandwidth.classic(100, Refill.intervally(100, Duration.ofMinutes(1)));
+
     /**
      * Resolves a rate limit bucket for a given IP address and endpoint.
      * It creates a new bucket if one does not exist in the cache, applying the appropriate rate limit based on the endpoint.
@@ -48,15 +50,20 @@ public class RateLimitingService {
         String key = ip + ":" + endpoint;
 
         return cache.computeIfAbsent(key, k -> {
-            Bandwidth limit;
-            if (endpoint.startsWith("/api/v1/auth/login")) {
-                limit = loginLimit;
-            } else if (endpoint.startsWith("/api/v1/auth/register")) {
-                limit = registrationLimit;
-            } else {
-                limit = apiLimit;
+            if (isAliasRedirectEndpoint(endpoint)) {
+                return Bucket.builder().addLimit(aliasRedirectLimit).build();
             }
-            return Bucket.builder().addLimit(limit).build();
+            if (endpoint.startsWith("/api/v1/auth/login")) {
+                return Bucket.builder().addLimit(loginLimit).build();
+            }
+            else if (endpoint.startsWith("/api/v1/auth/register")) {
+                return Bucket.builder().addLimit(registrationLimit).build();
+            }
+            return Bucket.builder().addLimit(apiLimit).build();
         });
+    }
+
+    private boolean isAliasRedirectEndpoint(String endpoint) {
+        return endpoint.matches("^/[^/]+$");
     }
 }
