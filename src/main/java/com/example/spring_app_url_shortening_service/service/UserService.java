@@ -1,10 +1,7 @@
 package com.example.spring_app_url_shortening_service.service;
 
 import com.example.spring_app_url_shortening_service.entity.User;
-import com.example.spring_app_url_shortening_service.exception.EmailAlreadyExistsException;
-import com.example.spring_app_url_shortening_service.exception.IncorrectPasswordException;
-import com.example.spring_app_url_shortening_service.exception.PasswordMismatchException;
-import com.example.spring_app_url_shortening_service.exception.UsernameAlreadyExistsException;
+import com.example.spring_app_url_shortening_service.exception.*;
 import jakarta.persistence.EntityNotFoundException;
 
 import java.util.List;
@@ -76,10 +73,10 @@ public interface UserService {
      *
      * @param updatedUser a {@link User} object containing the updated user details (must include valid ID).
      * @throws EmailAlreadyExistsException    if the provided email is already in use by another user.
-     * @throws UsernameAlreadyExistsException if the provided username is already in use by another user.
+     * @throws UserAlreadyExistsException if the provided username is already in use by another user.
      */
     void updateUserProfile(User updatedUser)
-            throws EmailAlreadyExistsException, UsernameAlreadyExistsException;
+            throws EmailAlreadyExistsException, UserAlreadyExistsException;
 
     /**
      * Changes the password of the user identified by the given username.

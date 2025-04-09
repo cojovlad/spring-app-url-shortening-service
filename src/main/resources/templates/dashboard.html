@@ -1,112 +1,156 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Dashboard - URL Shortener</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <style>
-    body {
-      background-color: #f8f9fa;
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Dashboard - URL Shortener</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
 
-    .header {
-      background-color: #0d6efd;
-      color: white;
-      padding: 1rem 0;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    }
+        .header {
+            background-color: #0d6efd;
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
 
-    .dashboard-container {
-      max-width: 1200px;
-      margin: 2rem auto;
-      flex: 1;
-      padding: 0 1rem;
-    }
+        .dashboard-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            flex: 1;
+            padding: 0 1rem;
+        }
 
-    .dashboard-card {
-      border: none;
-      border-radius: 10px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-      background-color: white;
-      padding: 2rem;
-      min-height: 300px;
-    }
+        .dashboard-card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            background-color: white;
+            padding: 2rem;
+            min-height: 300px;
+        }
 
-    .footer {
-      background-color: #0d6efd;
-      color: white;
-      padding: 1rem 0;
-      text-align: center;
-      margin-top: auto;
-    }
+        .footer {
+            background-color: #0d6efd;
+            color: white;
+            padding: 1rem 0;
+            text-align: center;
+            margin-top: auto;
+        }
 
-    .nav-link {
-      color: white !important;
-      font-weight: 500;
-    }
+        .nav-link {
+            color: white !important;
+            font-weight: 500;
+        }
 
-    .nav-link:hover {
-      text-decoration: underline;
-    }
+        .nav-link:hover {
+            text-decoration: underline;
+        }
 
-    .btn-dashboard {
-      background-color: #0d6efd;
-      border: none;
-      padding: 10px 20px;
-      font-weight: 500;
-      letter-spacing: 0.5px;
-      color: white;
-    }
+        .btn-dashboard {
+            background-color: #0d6efd;
+            border: none;
+            padding: 10px 20px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            color: white;
+        }
 
-    .btn-dashboard:hover {
-      background-color: #0b5ed7;
-      color: white;
-    }
-  </style>
+        .btn-dashboard:hover {
+            background-color: #0b5ed7;
+            color: white;
+        }
+    </style>
 </head>
 <body>
 <!-- Header -->
 <header class="header">
-  <div class="container">
-    <div class="d-flex justify-content-between align-items-center">
-      <h4 class="mb-0">URL Shortener Dashboard</h4>
-      <nav>
-        <button type="submit" name="code" value="1" class="btn btn-primary me-2">English</button>
-        <button type="submit" name="code" value="2" class="btn btn-primary">Deutsch</button>
-        <a href="/api/v1/profile" class="btn btn-primary">View Profile</a>
-        <a href="/api/v1/auth/logout" class="btn btn-primary">Logout</a>
-      </nav>
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center">
+            <h4 class="mb-0">URL Shortener Dashboard</h4>
+            <nav>
+                <button type="submit" name="code" value="1" class="btn btn-primary me-2">English</button>
+                <button type="submit" name="code" value="2" class="btn btn-primary">Deutsch</button>
+                <a href="/api/v1/profile" class="btn btn-primary">View Profile</a>
+                <a href="/api/v1/auth/logout" class="btn btn-primary">Logout</a>
+            </nav>
+        </div>
     </div>
-  </div>
 </header>
 
 <!-- Main Content -->
 <main class="dashboard-container">
-  <div class="dashboard-card">
-    <h5 class="mb-4">Welcome to Your Dashboard</h5>
-    <p>This is your dashboard content area. You can add your URL shortening features here.</p>
+    <div class="dashboard-card">
+        <h5 class="mb-4">Welcome to Your Dashboard</h5>
+        <p>This is your dashboard content area. You can add your URL shortening features here.</p>
 
-    <!-- Placeholder for future functionality -->
-    <div class="mt-4 p-4 border rounded" style="background-color: #f8f9fa;">
-      <p class="text-muted">Feature coming soon</p>
+        <div th:if="${urlCreationError}" class="alert alert-danger alert-dismissible fade show" role="alert">
+            <span th:text="${urlCreationError}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+
+        <div th:if="${urlRedirectError}" class="alert alert-danger alert-dismissible fade show" role="alert">
+            <span th:text="${urlRedirectError}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+
+        <!-- Form to create new short URL -->
+        <form method="post" action="/api/v1/dashboard/create-url" class="row g-3">
+            <div class="col-md-6">
+                <label for="originalUrl" class="form-label">Original URL</label>
+                <input type="url" class="form-control" id="originalUrl" name="originalUrl" required>
+            </div>
+            <div class="col-md-3">
+                <label for="alias" class="form-label">Alias (optional)</label>
+                <input type="text" class="form-control" id="alias" name="alias">
+            </div>
+            <div class="col-md-3">
+                <label for="expiration" class="form-label">Expiration Date (optional)</label>
+                <input type="datetime-local" class="form-control" id="expiration" name="expiration">
+            </div>
+            <div class="col-12">
+                <button type="submit" class="btn btn-dashboard">Create Short URL</button>
+            </div>
+        </form>
+
+        <!-- Table to display user URLs -->
+        <div class="mt-5">
+            <h5>Your Active URLs</h5>
+            <table class="table table-bordered mt-3">
+                <thead>
+                <tr>
+                    <th>Original URL</th>
+                    <th>Short Alias</th>
+                    <th>Created At</th>
+                    <th>Expires At</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="url : ${activeUrls}">
+                    <td th:text="${url.originalUrl}">https://example.com</td>
+                    <td th:text="${url.alias}">short123</td>
+                    <td th:text="${#temporals.format(url.createdAt, 'yyyy-MM-dd HH:mm')}">2025-04-01</td>
+                    <td th:text="${url.expirationDate != null ? #temporals.format(url.expirationDate, 'yyyy-MM-dd HH:mm') : 'No Expiry'}">
+                        2025-04-20
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
-
-    <!-- Example Button -->
-    <button class="btn btn-dashboard mt-4">
-      Create New Short URL
-    </button>
-  </div>
 </main>
 
 <!-- Footer -->
 <footer class="footer">
-  <div class="container">
-    <p class="mb-0">© 2025 URL Shortener Service. All rights reserved.</p>
-  </div>
+    <div class="container">
+        <p class="mb-0">© 2025 URL Shortener Service. All rights reserved.</p>
+    </div>
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
