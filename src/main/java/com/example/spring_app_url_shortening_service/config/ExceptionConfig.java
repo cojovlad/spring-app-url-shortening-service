@@ -1,10 +1,8 @@
 package com.example.spring_app_url_shortening_service.config;
 
-import com.example.spring_app_url_shortening_service.controller.RedirectController;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.handler.SimpleMappingExceptionResolver;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.Properties;
 
@@ -15,7 +13,6 @@ public class ExceptionConfig {
     public SimpleMappingExceptionResolver exceptionResolver() {
         SimpleMappingExceptionResolver resolver = new SimpleMappingExceptionResolver();
 
-        // Map exceptions to view names (or redirect URLs)
         Properties exceptionMappings = new Properties();
         exceptionMappings.put("com.yourpackage.exception.UrlNotFoundException", "/api/v1/dashboard");
         exceptionMappings.put("java.lang.Exception", "/api/v1/dashboard");
