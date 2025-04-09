@@ -2,6 +2,7 @@ package com.example.spring_app_url_shortening_service.controller;
 
 import com.example.spring_app_url_shortening_service.entity.User;
 import com.example.spring_app_url_shortening_service.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -18,10 +19,11 @@ public class ProfileController {
     /**
      * Constructs a ProfileController with required user service.
      *
-     * @param userService the service that handles user data operations
+     * @param userServiceInjection the service that handles user data operations
      */
-    public ProfileController(UserService userService) {
-        this.userService = userService;
+    @Autowired
+    public ProfileController(UserService userServiceInjection) {
+        this.userService = userServiceInjection;
     }
 
     /**

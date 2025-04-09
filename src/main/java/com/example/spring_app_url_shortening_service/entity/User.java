@@ -5,6 +5,7 @@ import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -72,6 +73,14 @@ public class User implements UserDetails {
     @JoinColumn(name="language_id")
     private Language language;
 
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(
+            name = "user_urls",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "url_id")
+    )
+    private List<Url> urls = new ArrayList<>();
+
     /**
      * Flag indicating whether the user account is active.
      * Defaults to true (active) when created.
@@ -87,6 +96,12 @@ public class User implements UserDetails {
             Role defaultRole = new Role();
             defaultRole.setId(1L);
             this.role = defaultRole;
+        }
+
+        if(this.language==null){
+            Language defaultLanguage = new Language();
+            defaultLanguage.setId(1L);
+            this.language = defaultLanguage;
         }
     }
 

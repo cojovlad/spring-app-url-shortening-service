@@ -3,6 +3,7 @@ package com.example.spring_app_url_shortening_service.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.session.SessionRegistry;
@@ -94,8 +95,9 @@ public class SecurityConfig {
                         .requestMatchers("/api/v1/profile/**")
                         .authenticated())
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(HttpMethod.GET, "/{alias:^\\w+$}").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/").permitAll()
                         .requestMatchers(
-                                "/",
                                 "/error",
                                 "/api/v1/auth/login",
                                 "/api/v1/auth/register",
@@ -118,7 +120,7 @@ public class SecurityConfig {
                         .logoutUrl("/api/v1/auth/logout")
                         .logoutSuccessUrl("/api/v1/auth/login?logout")
                         .invalidateHttpSession(true)
-                        .deleteCookies("JSESSIONID", "remember-me-cookie") // Add remember-me cookie here
+                        .deleteCookies("JSESSIONID", "remember-me-cookie")
                         .permitAll()
                 )
                 .csrf().disable();
