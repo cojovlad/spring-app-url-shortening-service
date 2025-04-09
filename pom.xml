@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.example</groupId>
 	<artifactId>spring-app-url-shortening-service</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<name>spring-app-url-shortening-service</name>
 	<description>A URL shortening service built with Spring Boot. Allows users to create, retrieve, update, and delete short URLs while tracking access statistics. Uses Spring Security, Spring Data JPA, MySQL, and Hibernate Validator. Includes Spring Boot DevTools, Thymeleaf, and Actuator for monitoring and metrics. Lombok for reducing boilerplate code.</description>
 	<url/>
