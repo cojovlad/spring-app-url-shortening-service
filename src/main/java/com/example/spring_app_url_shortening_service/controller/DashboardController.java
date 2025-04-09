@@ -1,7 +1,6 @@
 package com.example.spring_app_url_shortening_service.controller;
 
 import com.example.spring_app_url_shortening_service.entity.Url;
-import com.example.spring_app_url_shortening_service.entity.User;
 import com.example.spring_app_url_shortening_service.service.UserService;
 import com.example.spring_app_url_shortening_service.service.impl.UrlServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,13 +13,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 /**
- * Controller responsible for handling user dashboard interactions, such as viewing the dashboard
- * and setting the user's language preference.
+ * Controller responsible for handling user dashboard functionality including:
+ * displaying active URLs, creating new shortened URLs, and updating language preferences.
  */
 @Controller
 @RequestMapping("api/v1/dashboard")
@@ -29,6 +29,12 @@ public class DashboardController {
     private final UserService userService;
     private final UrlServiceImpl urlService;
 
+    /**
+     * Constructs the DashboardController with user and URL services.
+     *
+     * @param userServiceInjection service for user operations
+     * @param urlServiceInjection service for URL operations
+     */
     @Autowired
     public DashboardController(UserService userServiceInjection, UrlServiceImpl urlServiceInjection) {
         this.userService = userServiceInjection;
@@ -36,24 +42,38 @@ public class DashboardController {
     }
 
     /**
-     * Displays the dashboard page.
+     * Displays the user's dashboard with a list of active URLs.
      *
-     * @return the name of the dashboard view
+     * @param userDetails the authenticated user's details
+     * @param model the model to pass attributes to the view
+     * @return the dashboard view name
      */
     @GetMapping
     public String getDashboard(@AuthenticationPrincipal UserDetails userDetails, Model model) {
-        List<Url> activeUrls = urlService.getActiveUrlsForUser(userService.getUserByUsername(userDetails.getUsername()).orElseThrow());
+        List<Url> activeUrls = urlService.getActiveUrlsForUser(
+                userService.getUserByUsername(userDetails.getUsername()).orElseThrow()
+        );
         model.addAttribute("activeUrls", activeUrls);
         return "dashboard";
     }
 
+    /**
+     * Handles creation of a new shortened URL.
+     *
+     * @param originalUrl the original long URL to be shortened
+     * @param alias the custom alias for the shortened URL
+     * @param expiration optional expiration date-time string (ISO format)
+     * @param userDetails the authenticated user's details
+     * @param redirectAttributes used to pass error messages to redirected view
+     * @return redirect to the dashboard
+     */
     @PostMapping("/create-url")
     public String createUrl(
             @RequestParam String originalUrl,
             @RequestParam String alias,
             @RequestParam(required = false) String expiration,
             @AuthenticationPrincipal UserDetails userDetails,
-            Model model
+            RedirectAttributes redirectAttributes
     ) {
         LocalDateTime expirationDate = null;
         if (expiration != null && !expiration.isEmpty()) {
@@ -61,9 +81,14 @@ public class DashboardController {
         }
 
         try {
-            urlService.createUrl(originalUrl, alias, expirationDate, userService.getUserByUsername(userDetails.getUsername()).orElseThrow());
+            urlService.createUrl(
+                    originalUrl,
+                    alias,
+                    expirationDate,
+                    userService.getUserByUsername(userDetails.getUsername()).orElseThrow()
+            );
         } catch (Exception e) {
-            model.addAttribute("error", e.getMessage());
+            redirectAttributes.addFlashAttribute("urlCreationError", e.getMessage());
         }
 
         return "redirect:/api/v1/dashboard";
@@ -71,12 +96,11 @@ public class DashboardController {
 
     /**
      * Updates the logged-in user's language preference.
-     * This method is triggered by a POST form or request that passes a language code.
      *
-     * @param code the numeric language code (e.g., 0 = English, 1 = German)
-     * @param auth the authentication object containing the current user's details
-     * @return redirect to the dashboard view
-     * @throws Exception if updating the user's language fails
+     * @param code language code (e.g., 0 = English, 1 = German)
+     * @param auth current authenticated user
+     * @return redirect to dashboard
+     * @throws Exception if the language update fails
      */
     @PostMapping("/set-language")
     public String setLanguage(@RequestParam int code, Authentication auth) throws Exception {

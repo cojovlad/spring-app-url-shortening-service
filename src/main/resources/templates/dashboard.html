@@ -90,6 +90,16 @@
         <h5 class="mb-4">Welcome to Your Dashboard</h5>
         <p>This is your dashboard content area. You can add your URL shortening features here.</p>
 
+        <div th:if="${urlCreationError}" class="alert alert-danger alert-dismissible fade show" role="alert">
+            <span th:text="${urlCreationError}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+
+        <div th:if="${urlRedirectError}" class="alert alert-danger alert-dismissible fade show" role="alert">
+            <span th:text="${urlRedirectError}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+
         <!-- Form to create new short URL -->
         <form method="post" action="/api/v1/dashboard/create-url" class="row g-3">
             <div class="col-md-6">
